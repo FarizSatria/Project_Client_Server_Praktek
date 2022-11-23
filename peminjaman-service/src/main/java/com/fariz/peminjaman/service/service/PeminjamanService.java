@@ -5,6 +5,7 @@
 package com.fariz.peminjaman.service.service;
 
 import com.fariz.peminjaman.service.VO.Anggota;
+import com.fariz.peminjaman.service.VO.Buku;
 import com.fariz.peminjaman.service.VO.ResponseTemplateVO;
 import com.fariz.peminjaman.service.entity.Peminjaman;
 import com.fariz.peminjaman.service.repository.PeminjamanRepository;
@@ -35,8 +36,11 @@ public class PeminjamanService {
         Anggota anggota = 
         restTemplate.getForObject("http://localhost:9001/anggota/"
                 + peminjaman.getAnggotaId(), Anggota.class);
+        Buku buku = restTemplate.getForObject("http://localhost:9003/buku/" 
+                + peminjaman.getBukuId(), Buku.class);
         vo.setPeminjaman(peminjaman);
         vo.setAnggota(anggota); 
+        vo.setBuku(buku); 
         return vo;
     }
     
