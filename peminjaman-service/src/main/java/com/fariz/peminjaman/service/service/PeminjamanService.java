@@ -36,7 +36,8 @@ public class PeminjamanService {
         Anggota anggota = 
         restTemplate.getForObject("http://localhost:9001/anggota/"
                 + peminjaman.getAnggotaId(), Anggota.class);
-        Buku buku = restTemplate.getForObject("http://localhost:9003/buku/" 
+        Buku buku = 
+        restTemplate.getForObject("http://localhost:9005/buku/" 
                 + peminjaman.getBukuId(), Buku.class);
         vo.setPeminjaman(peminjaman);
         vo.setAnggota(anggota); 
