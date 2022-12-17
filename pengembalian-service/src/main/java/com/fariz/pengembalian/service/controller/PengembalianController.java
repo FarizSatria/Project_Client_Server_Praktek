@@ -25,16 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/pengembalian")
 public class PengembalianController {
-
+    
     @Autowired
     private PengembalianService pengembalianService;
-
-    @PostMapping("/")
-    public Pengembalian savePengembalian(@RequestBody Pengembalian pengembalian) {
-        try {
+    
+    @PostMapping
+    public Pengembalian savePengembalian(@RequestBody Pengembalian pengembalian){
+        try{
             System.err.println(pengembalian);
             return pengembalianService.savePengembalian(pengembalian);
-        } catch (ParseException ex) {
+        } catch (ParseException ex){
             Logger.getLogger(PengembalianController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

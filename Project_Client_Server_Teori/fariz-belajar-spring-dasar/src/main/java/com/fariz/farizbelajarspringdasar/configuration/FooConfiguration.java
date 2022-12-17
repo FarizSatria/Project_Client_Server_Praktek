@@ -2,28 +2,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fariz.farizbelajarspringdasar;
+package com.fariz.farizbelajarspringdasar.configuration;
 
-import data.Connection;
-import data.Server;
+import data.Foo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  *
  * @author Acer
  */
 @Configuration
-public class LifeCycleConfiguration {
+public class FooConfiguration {
     
     @Bean
-    public Connection connection(){
-        return new Connection();
+    @Primary
+    public Foo foo(){
+        return new Foo();
     }
     
-    @Bean (initMethod = "start", destroyMethod = "stop")
-    public Server server(){
-        return new Server();
+    @Bean
+    public Foo foo2(){
+        return new Foo();
     }
     
+    @Bean
+    public Foo foo3(){
+        return new Foo();
+    }
 }

@@ -4,12 +4,11 @@
  */
 package com.fariz.farizbelajarspringdasar;
 
-import data.Connection;
-import data.Server;
-import org.junit.jupiter.api.AfterEach;
+import data.Foo;
+import data.FooBar;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,29 +16,22 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  *
  * @author Acer
  */
-public class LifeCycleTest {
+public class OptionalTest {
     
     private ConfigurableApplicationContext applicationContext;
     
     @BeforeEach
     void setUp(){
-        applicationContext = new AnnotationConfigApplicationContext(LifeCycleConfiguration.class);
+        applicationContext = new AnnotationConfigApplicationContext(OptionalConfiguration.class);
         applicationContext.registerShutdownHook();
     }
     
-    @AfterEach
-    void tearDown(){
-        //applicationContext.close();
-    }
-    
     @Test
-    void testConnection(){
+    void testOptional(){
+        Foo foo = applicationContext.getBean(Foo.class);
+        FooBar fooBar = applicationContext.getBean(FooBar.class);
         
-        Connection connection = applicationContext.getBean(Connection.class);
-    }
-    
-    @Test
-    void testServer(){
-        Server server = applicationContext.getBean(Server.class);
+        Assertions.assertNull(fooBar.getBar());
+        Assertions.assertSame(foo, fooBar.getFoo());
     }
 }

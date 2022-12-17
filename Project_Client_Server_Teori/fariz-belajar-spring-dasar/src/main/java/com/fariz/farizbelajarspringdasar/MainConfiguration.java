@@ -4,26 +4,20 @@
  */
 package com.fariz.farizbelajarspringdasar;
 
-import data.Connection;
-import data.Server;
-import org.springframework.context.annotation.Bean;
+import com.fariz.farizbelajarspringdasar.configuration.BarConfiguration;
+import com.fariz.farizbelajarspringdasar.configuration.FooConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  *
  * @author Acer
  */
 @Configuration
-public class LifeCycleConfiguration {
-    
-    @Bean
-    public Connection connection(){
-        return new Connection();
-    }
-    
-    @Bean (initMethod = "start", destroyMethod = "stop")
-    public Server server(){
-        return new Server();
-    }
+@Import({
+    FooConfiguration.class,
+    BarConfiguration.class
+})
+public class MainConfiguration {
     
 }

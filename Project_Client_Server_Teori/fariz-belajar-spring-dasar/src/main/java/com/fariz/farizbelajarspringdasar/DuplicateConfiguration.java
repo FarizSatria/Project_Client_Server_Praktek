@@ -7,7 +7,7 @@ package com.fariz.farizbelajarspringdasar;
 import data.Foo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
 
 /**
  *

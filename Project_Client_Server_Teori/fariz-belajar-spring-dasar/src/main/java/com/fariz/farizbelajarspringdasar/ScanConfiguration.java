@@ -4,9 +4,7 @@
  */
 package com.fariz.farizbelajarspringdasar;
 
-import data.Connection;
-import data.Server;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -14,16 +12,9 @@ import org.springframework.context.annotation.Configuration;
  * @author Acer
  */
 @Configuration
-public class LifeCycleConfiguration {
-    
-    @Bean
-    public Connection connection(){
-        return new Connection();
-    }
-    
-    @Bean (initMethod = "start", destroyMethod = "stop")
-    public Server server(){
-        return new Server();
-    }
+@ComponentScan(basePackages = {
+    "com.fariz.farizbelajarspringdasar.configuration"
+})
+public class ScanConfiguration {
     
 }

@@ -4,8 +4,10 @@
  */
 package com.fariz.farizbelajarspringdasar;
 
-import data.Connection;
-import data.Server;
+import data.Bar;
+import data.Foo;
+import data.FooBar;
+import java.util.Optional;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,16 +16,15 @@ import org.springframework.context.annotation.Configuration;
  * @author Acer
  */
 @Configuration
-public class LifeCycleConfiguration {
+public class OptionalConfiguration {
     
     @Bean
-    public Connection connection(){
-        return new Connection();
+    public Foo foo(){
+        return new Foo();       
     }
     
-    @Bean (initMethod = "start", destroyMethod = "stop")
-    public Server server(){
-        return new Server();
+    @Bean
+    public FooBar fooBar(Optional<Foo> foo, Optional<Bar> bar){
+        return new FooBar(foo.orElse(null), bar.orElse(null));
     }
-    
 }
