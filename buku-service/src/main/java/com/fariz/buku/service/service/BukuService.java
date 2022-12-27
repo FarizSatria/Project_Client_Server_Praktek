@@ -6,6 +6,7 @@ package com.fariz.buku.service.service;
 
 import com.fariz.buku.service.entity.Buku;
 import com.fariz.buku.service.repository.BukuRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +27,15 @@ public class BukuService {
         return bukuRepository.findByBukuId(bukuId);
     }
     
+    public List<Buku> getAllBuku(){
+        return bukuRepository.findAll();
+    }
+    
+    public void deleteBukuById(Long bukuId){
+        bukuRepository.deleteById(bukuId);
+    }
+    
+    public Buku updateBuku(Buku buku){
+        return bukuRepository.save(buku);
+    }
 }

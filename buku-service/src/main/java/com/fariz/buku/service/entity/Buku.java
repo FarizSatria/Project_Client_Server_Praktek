@@ -28,5 +28,5 @@ public class Buku {
     private String judul;
     private String pengarang;
     private String penerbit;
-    private int tahunTerbit;
+    private String tahunTerbit;
 }

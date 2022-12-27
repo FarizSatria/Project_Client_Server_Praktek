@@ -6,10 +6,13 @@ package com.fariz.buku.service.controller;
 
 import com.fariz.buku.service.entity.Buku;
 import com.fariz.buku.service.service.BukuService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,5 +35,20 @@ public class BukuController {
     @GetMapping("/{id}")
     public Buku findBukuById(@PathVariable("id") Long bukuId){
         return bukuService.findBukuById(bukuId);
+    }
+    
+    @GetMapping("/")
+    public List<Buku> getAllBuku(){
+        return bukuService.getAllBuku();
+    }
+    
+    @PutMapping("")
+    public Buku updateBuku(@RequestBody Buku buku){
+        return bukuService.updateBuku(buku);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deleteBukuById(@PathVariable("id") Long bukuId){
+        bukuService.deleteBukuById(bukuId);
     }
 }
