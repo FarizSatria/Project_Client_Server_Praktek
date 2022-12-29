@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fariz.client_buku.controller;
+package com.fariz.client_2101082034.controller;
 
-import com.fariz.client_buku.FormBuku;
-import com.fariz.client_buku.model.Buku;
-import com.fariz.client_buku.service.BukuService;
+import com.fariz.client_2101082034.FormBuku;
+import com.fariz.client_2101082034.model.Buku;
+import com.fariz.client_2101082034.service.BukuService;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

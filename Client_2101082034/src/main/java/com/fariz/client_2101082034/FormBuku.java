@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.fariz.client_buku;
+package com.fariz.client_2101082034;
 
-import com.fariz.client_buku.controller.BukuController;
+import com.fariz.client_2101082034.controller.BukuController;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -65,17 +65,17 @@ public class FormBuku extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        txtIdBuku = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtIdBuku = new javax.swing.JTextField();
         txtKode = new javax.swing.JTextField();
         txtJudul = new javax.swing.JTextField();
         txtPengarang = new javax.swing.JTextField();
         txtPenerbit = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         txtTahun = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         btnCari = new javax.swing.JButton();
         btnSimpan = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
@@ -89,56 +89,51 @@ public class FormBuku extends javax.swing.JFrame {
 
         jLabel1.setText("ID Buku");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(20, 20, 41, 16);
-
-        txtIdBuku.setText("jTextField1");
-        txtIdBuku.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdBukuActionPerformed(evt);
-            }
-        });
-        getContentPane().add(txtIdBuku);
-        txtIdBuku.setBounds(130, 20, 250, 22);
+        jLabel1.setBounds(30, 30, 60, 16);
 
         jLabel2.setText("Kode");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(20, 50, 27, 16);
-
-        txtKode.setText("jTextField2");
-        getContentPane().add(txtKode);
-        txtKode.setBounds(130, 50, 350, 22);
-
-        txtJudul.setText("jTextField3");
-        getContentPane().add(txtJudul);
-        txtJudul.setBounds(130, 80, 350, 22);
-
-        txtPengarang.setText("jTextField4");
-        getContentPane().add(txtPengarang);
-        txtPengarang.setBounds(130, 110, 350, 22);
-
-        txtPenerbit.setText("jTextField5");
-        getContentPane().add(txtPenerbit);
-        txtPenerbit.setBounds(130, 140, 350, 22);
+        jLabel2.setBounds(30, 60, 27, 16);
 
         jLabel3.setText("Judul Buku");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(20, 80, 58, 16);
-
-        txtTahun.setText("jTextField6");
-        getContentPane().add(txtTahun);
-        txtTahun.setBounds(130, 170, 350, 22);
+        jLabel3.setBounds(30, 90, 70, 16);
 
         jLabel4.setText("Pengarang");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(20, 110, 57, 16);
+        jLabel4.setBounds(30, 120, 70, 16);
 
         jLabel5.setText("Penerbit");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(20, 140, 44, 16);
+        jLabel5.setBounds(30, 150, 70, 16);
 
         jLabel6.setText("Tahun Terbit");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(20, 170, 66, 16);
+        jLabel6.setBounds(30, 180, 70, 16);
+
+        txtIdBuku.setText("jTextField1");
+        getContentPane().add(txtIdBuku);
+        txtIdBuku.setBounds(120, 30, 320, 22);
+
+        txtKode.setText("jTextField2");
+        getContentPane().add(txtKode);
+        txtKode.setBounds(120, 60, 420, 22);
+
+        txtJudul.setText("jTextField3");
+        getContentPane().add(txtJudul);
+        txtJudul.setBounds(120, 90, 420, 22);
+
+        txtPengarang.setText("jTextField4");
+        getContentPane().add(txtPengarang);
+        txtPengarang.setBounds(120, 120, 420, 22);
+
+        txtPenerbit.setText("jTextField5");
+        getContentPane().add(txtPenerbit);
+        txtPenerbit.setBounds(120, 150, 420, 22);
+
+        txtTahun.setText("jTextField6");
+        getContentPane().add(txtTahun);
+        txtTahun.setBounds(120, 180, 420, 22);
 
         btnCari.setText("Cari");
         btnCari.addActionListener(new java.awt.event.ActionListener() {
@@ -147,7 +142,7 @@ public class FormBuku extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnCari);
-        btnCari.setBounds(390, 20, 72, 22);
+        btnCari.setBounds(460, 30, 72, 22);
 
         btnSimpan.setText("Simpan");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -156,7 +151,7 @@ public class FormBuku extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnSimpan);
-        btnSimpan.setBounds(20, 210, 72, 22);
+        btnSimpan.setBounds(30, 220, 72, 22);
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -165,7 +160,7 @@ public class FormBuku extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnUpdate);
-        btnUpdate.setBounds(130, 210, 72, 22);
+        btnUpdate.setBounds(150, 220, 72, 22);
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -174,7 +169,7 @@ public class FormBuku extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnDelete);
-        btnDelete.setBounds(240, 210, 72, 22);
+        btnDelete.setBounds(270, 220, 72, 22);
 
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -183,24 +178,28 @@ public class FormBuku extends javax.swing.JFrame {
             }
         });
         getContentPane().add(btnCancel);
-        btnCancel.setBounds(350, 210, 72, 22);
+        btnCancel.setBounds(390, 220, 72, 22);
 
         tableBuku.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Buku", "Kode", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit"
+                "ID buku", "Kode", "Judul Buku", "Pengarang", "Penerbit", "Tahun Terbit"
             }
         ));
         jScrollPane1.setViewportView(tableBuku);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(20, 240, 460, 190);
+        jScrollPane1.setBounds(20, 252, 520, 250);
 
-        setSize(new java.awt.Dimension(515, 482));
+        setSize(new java.awt.Dimension(576, 558));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
+        controller.getBukuId();
+    }//GEN-LAST:event_btnCariActionPerformed
 
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         controller.saveBuku();
@@ -214,10 +213,6 @@ public class FormBuku extends javax.swing.JFrame {
         controller.bersihForm();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void btnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCariActionPerformed
-        controller.getBukuId();
-    }//GEN-LAST:event_btnCariActionPerformed
-
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         controller.deleteBuku();
         controller.viewTabel();
@@ -227,10 +222,6 @@ public class FormBuku extends javax.swing.JFrame {
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         controller.bersihForm();
     }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void txtIdBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdBukuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdBukuActionPerformed
 
     /**
      * @param args the command line arguments

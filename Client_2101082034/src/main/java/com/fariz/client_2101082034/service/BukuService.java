@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fariz.client_buku.service;
+package com.fariz.client_2101082034.service;
 
-import com.fariz.client_buku.model.Buku;
+import com.fariz.client_2101082034.model.Buku;
 import com.google.gson.Gson;
 import java.util.List;
 import kong.unirest.GenericType;
