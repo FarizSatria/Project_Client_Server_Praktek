@@ -11,6 +11,7 @@ import com.fariz.pengembalian.service.repository.PengembalianRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -61,5 +62,17 @@ public class PengembalianService {
         vo.setPeminjaman(peminjaman.getPeminjaman());
         vo.setPengembalian(pengembalian);
         return vo;
+    }
+    
+    public List<Pengembalian> getAllPengembalian(){
+        return pengembalianRepository.findAll();
+    }
+    
+    public void deletePengembalianById(Long pengembalianId){
+        pengembalianRepository.deleteById(pengembalianId);
+    }
+    
+    public Pengembalian updatePengembalian(Pengembalian pengembalian){
+        return pengembalianRepository.save(pengembalian);
     }
 }

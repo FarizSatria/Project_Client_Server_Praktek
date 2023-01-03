@@ -8,12 +8,15 @@ import com.fariz.pengembalian.service.VO.ResponseTemplateVO;
 import com.fariz.pengembalian.service.entity.Pengembalian;
 import com.fariz.pengembalian.service.service.PengembalianService;
 import java.text.ParseException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,5 +46,20 @@ public class PengembalianController {
     @GetMapping("/{id}")
     public ResponseTemplateVO getPengembalian(@PathVariable("id") Long pengembalianId){
         return pengembalianService.getPengembalian(pengembalianId);
+    }
+    
+    @GetMapping("/")
+    public List<Pengembalian> getAllPengembalian(){
+        return pengembalianService.getAllPengembalian();
+    }
+    
+    @PutMapping("")
+    public Pengembalian updatePengembalian(@RequestBody Pengembalian pengembalian){
+        return pengembalianService.updatePengembalian(pengembalian);
+    }
+    
+    @DeleteMapping("/{id}")
+    public void deletePengembalianById(@PathVariable("id") Long pengembalianId){
+        pengembalianService.deletePengembalianById(pengembalianId);
     }
 }
