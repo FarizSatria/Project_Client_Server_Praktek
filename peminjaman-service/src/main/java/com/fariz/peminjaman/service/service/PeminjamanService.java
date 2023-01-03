@@ -9,6 +9,7 @@ import com.fariz.peminjaman.service.VO.Buku;
 import com.fariz.peminjaman.service.VO.ResponseTemplateVO;
 import com.fariz.peminjaman.service.entity.Peminjaman;
 import com.fariz.peminjaman.service.repository.PeminjamanRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -43,6 +44,17 @@ public class PeminjamanService {
         vo.setAnggota(anggota); 
         vo.setBuku(buku); 
         return vo;
+    }
+    public List<Peminjaman> getAllPeminjaman(){
+        return peminjamanRepository.findAll();
+    }
+    
+    public void deletePeminjamanById(Long peminjamanId){
+        peminjamanRepository.deleteById(peminjamanId);
+    }
+    
+    public Peminjaman updatePeminjaman(Peminjaman peminjaman){
+        return peminjamanRepository.save(peminjaman);
     }
     
 }
