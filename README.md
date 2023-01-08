@@ -1,2 +1,1 @@
-# Project_Client_Server_Praktek
- 
+# Project_Client_Server_Teori
