@@ -23,7 +23,7 @@ public class FarizConfiguration {
 ```
 <br>
 
-#Membuat Application Context
+# Membuat Application Context
 Selanjutnya, setelah membuat Class Configuration, kita bisa menggunakan class AnnotationConfigApplicationContext untuk membuat Application Context<br> <br>
 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/AnnotationConfigApplicationContext.html 
 ```java
@@ -37,7 +37,7 @@ public class ApplicationContextTest {
 ```
 <br>
 
-#Singleton
+# Singleton
 Singleton adalah salah satu Design Patterns untuk pembuatan objek, dimana sebuah object hanya dibuat satu kali saja
 Dan ketika kita membutuhkan object tersebut, kita hanya akan menggunakan object yang sama
 ```java
