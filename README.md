@@ -18,10 +18,45 @@ Untuk membuat ApplicationContext menggunakan Annotation, pertama kita bisa perlu
 Configuration Class adalah sebuah class yang terdapat annotation @Configuration pada class tersebut
 ```java
 @Configuration
-public class HelloWorldConfiguration{
+public class FarizConfiguration {
 }
 ```
 <br>
+
+#Membuat Application Context
+Selanjutnya, setelah membuat Class Configuration, kita bisa menggunakan class AnnotationConfigApplicationContext untuk membuat Application Context<br> <br>
+https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/AnnotationConfigApplicationContext.html 
+```java
+public class ApplicationContextTest {
+    @Test
+    void testApplicationContext(){
+        ApplicationContext context = new AnnotationConfigApplicationContext(FarizConfiguration.class);  
+        Assertions.assertNotNull(context);
+    }
+}
+```
+<br>
+
+#Singleton
+Singleton adalah salah satu Design Patterns untuk pembuatan objek, dimana sebuah object hanya dibuat satu kali saja
+Dan ketika kita membutuhkan object tersebut, kita hanya akan menggunakan object yang sama
+```java
+public class Database {
+    private static Database database;
+    public static Database getInstance(){
+        if(database == null){
+            database = new Database();
+        }
+        return database;
+    }
+    private Database(){   
+    }
+}
+```
+
+
+
+
 
 
 
