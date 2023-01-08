@@ -1,5 +1,7 @@
 # Project Client Server Teori
 
-Nama : Fariz Satria Refandino /n
-NoBP : 2101082034 /n
-Kelas : Tekom 2B /n
+Nama : Fariz Satria Refandino 
+
+NoBP : 2101082034
+
+Kelas : Tekom 2B
