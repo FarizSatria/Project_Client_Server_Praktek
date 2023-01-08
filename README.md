@@ -16,6 +16,13 @@ https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframe
 
 Untuk membuat ApplicationContext menggunakan Annotation, pertama kita bisa perlu membuat Configuration class
 Configuration Class adalah sebuah class yang terdapat annotation @Configuration pada class tersebut
+```java
+@Configuration
+public class HelloWorldConfiguration{
+}
+```
+<br>
+
 
 
 
