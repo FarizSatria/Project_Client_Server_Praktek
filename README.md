@@ -53,6 +53,27 @@ public class Database {
     }
 }
 ```
+```java
+public class DatabaseTest {
+    @Test
+    void testSingleton(){
+        
+        var database1 = Database.getInstance();
+        var database2 = Database.getInstance();
+        
+        Assertions.assertSame(database1, database2);
+    }
+}public class DatabaseTest {
+    @Test
+    void testSingleton(){
+        
+        var database1 = Database.getInstance();
+        var database2 = Database.getInstance();
+        
+        Assertions.assertSame(database1, database2);
+    }
+}
+```
 
 
 
