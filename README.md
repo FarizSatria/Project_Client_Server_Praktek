@@ -57,23 +57,86 @@ public class Database {
 public class DatabaseTest {
     @Test
     void testSingleton(){
-        
         var database1 = Database.getInstance();
         var database2 = Database.getInstance();
-        
         Assertions.assertSame(database1, database2);
     }
 }public class DatabaseTest {
     @Test
     void testSingleton(){
-        
         var database1 = Database.getInstance();
         var database2 = Database.getInstance();
-        
         Assertions.assertSame(database1, database2);
     }
 }
 ```
+<br>
+
+# Bean
+Secara default, bean merupakan singleton, artinya jika kita mengakses bean yang sama, maka dia akan mengembalikan object yang sama. Kita juga bisa mengubahnya jika tidak ingin singleton<br><br>
+Untuk membuat bean, kita bisa membuat sebuah method di dalam class Configuration
+Selanjutnya nama method tersebut akan menjadi nama bean nya, dan return object nya menjadi object bean nya
+Method tersebut perlu kita tambahkan annotation @Bean, untuk menandakan bahwa itu adalah bean
+Secara otomatis Spring akan mengeksekusi method tersebut, dan return value nya akan dijadikan object bean secara otomatis, dan disimpan di container IoC
+```java
+@Slf4j
+@Configuration
+public class BeanConfiguration {
+    @Bean
+    public Foo foo(){
+        Foo foo = new Foo();
+        log.info("Create new foo");
+        return foo;
+    }
+}
+```
+```java
+public class BeanTest {
+    @Test
+    void testCreateBean(){
+        ApplicationContext context = new AnnotationConfigApplicationContext(BeanConfiguration.class); 
+        Assertions.assertNotNull(context);
+    }
+    @Test
+    void testGetBean(){
+        ApplicationContext context = new AnnotationConfigApplicationContext(BeanConfiguration.class);  
+        Foo foo1 = context.getBean(Foo.class);
+        Foo foo2 = context.getBean(Foo.class);  
+        Assertions.assertSame(foo1, foo2);
+    }
+}
+```
+<br>
+
+# Duplicate Bean
+Di Spring, kita bisa mendaftarkan beberapa bean dengan tipe yang sama
+Namun perlu diperhatikan, jika kita membuat bean dengan tipe data yang sama, maka kita harus menggunakan nama bean yang berbeda
+Selain itu, saat kita mengakses bean nya, kita wajib menyebutkan nama bean nya, karena jika tidak, Spring akan bingung harus mengakses bean yang mana
+```java
+@Configuration
+public class DuplicateConfiguration {
+    @Bean
+    public Foo foo1(){
+        return new Foo();
+    }    
+    @Bean
+    public Foo foo2(){
+        return new Foo();
+    }
+}
+```
+```java
+public class DuplicateTest {   
+    @Test
+    void testDuplicate(){       
+        ApplicationContext context = new AnnotationConfigApplicationContext(DuplicateConfiguration.class);       
+        Assertions.assertThrows(NoUniqueBeanDefinitionException.class,() -> {
+            Foo foo = context.getBean(Foo.class);
+        });      
+    }
+}
+```
+
 
 
 
