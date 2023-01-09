@@ -668,6 +668,8 @@ Assertions.assertEquals("https://example.com", client.getEndpoint());
 Assertions.assertEquals("private", client.getPrivateKey());
 Assertions.assertEquals("public", client.getPublicKey());
 ```
+<br><br>
+
 # Inheritance
 Saat kita mengakses bean, kita bisa langsung menyebutkan tipe class bean tersebut, atau bisa juga dengan parent class / parent interface bean
 Misal jika kita memiliki sebuah interface bernama MerchantService, lalu kita memiliki bean dengan object implementasi class nya MerchantServiceImpl, maka untuk mengakses bean nya, kita tidak hanya bisa menggunakan tipe MerchantServiceImpl, namun juga bisa dengan MerchantService
@@ -690,11 +692,14 @@ public class InheritanceConfiguration {
     
 }
 ```
+<br><br>
+
 
 # Bean Factory
 ApplicationContext adalah interface turunan dari BeanFactory
 BeanFactory merupakan kontrak untuk management bean di Spring
 Method-method yang sebelumnya kita gunakan untuk mengambil bean, sebenarnya merupakan method kontrak dari interface BeanFactory
+<br><br>
 
 # Listable Bean Factory
 Listable Bean Factory adalah turunan dari Bean Factory yang bisa kita gunakan untuk mengakses beberapa bean sekaligus
@@ -705,6 +710,8 @@ ObjectProvider<Foo> fooObjectProvider = applicationContext.getBeanProvider(Foo.c
 
 Map<String, Foo> beans = applicationContext.getBeansOfType(Foo.class);
 ```
+<br><br>
+
 # Bean Post Processor
 Bean Post Processor merupakan sebuah interface yang bisa kita gunakan untuk memodifikasi proses pembuatan bean di Application Context
 Bean Post Processor mirip seperti middleware, yang diakses sebelum bean di initialized dan setelah bean di initialized
@@ -745,6 +752,8 @@ public class Car implements IdAware{
     }
 }
 ```
+<br><br>
+
 # Ordered
 Saat kita membuat Bean Post Processor, kita bisa membuat lebih dari satu
 Kadang ada kasus saat membuat beberapa Bean Post Processor, kita ingin membuat yang berurutan
@@ -803,6 +812,8 @@ public class PrefixIdGeneratorBeanPostProcessor implements BeanPostProcessor, Or
     }
 }
 ```
+<br><br>
+
 # Aware
 Aware adalah super interface yang digunakan untuk semua Aware interface
 Aware ini diperuntukkan untuk penanda agar Spring melakukan injection object yang kita butuhkan
@@ -818,6 +829,8 @@ public class AuthService implements ApplicationContextAware, BeanNameAware{
     private ApplicationContext applicationContext;
 }
 ```
+<br><br>
+
 # Bean Factory Post Processor
 Secara default, mungkin kita tidak akan pernah sama sekali membuat Application Context secara manual
 Namun kadang ada keadaan kita ingin memodifikasi secara internal Application Context
@@ -841,9 +854,12 @@ public class FooBeanFactoryPostProcessor implements BeanDefinitionRegistryPostPr
     }    
 }
 ```
+<br><br>
+
 # Event Listener
 Spring memiliki fitur Event Listener yang bisa kita gunakan untuk komunikasi antar class menggunakan Event
 Event di Spring merupakan object turunan dari ApplicationEvent, sedangkan Listener di Spring merupakan turunan dari ApplicationListener
+<br><br>
 
 # Application Event Publisher
 Ketika kita ingin mengirimkan event ke listener, kita bisa menggunakan object ApplicationEventPublisher, dimana ApplicationEventPublisher juga merupakan super interface dari ApplicationContext
@@ -935,3 +951,139 @@ public class EventListenerTest {
     }
 }
 ```
+<br><br>
+
+# Event Listener Annotation
+Selain menggunakan interface ApplicationListener, kita juga bisa menggunakan Annotation untuk membuat Listener
+Ini lebih flexible dibanding menggunakan interface ApplicationListener
+Kita bisa menggunakan annotation @EventListener
+```java
+@Slf4j
+@Component
+public class UserListener {
+    
+    @EventListener(classes = LoginSuccessEvent.class)
+    public void onLoginSuccessEvent(LoginSuccessEvent event){
+        log.info("Success login again for user {}", event.getUser());
+    }
+}
+```
+Cara Kerja Event Listener Annotation?
+Annotation @EventListener bekerja dengan menggunakan Bean Post Processor bernama EventListenerMethodProcessor
+EventListenerMethodProcessor mendeteksi jika ada bean yang memiliki method dengan annotation @EventListener, maka secara otomatis akan membuat listener baru, lalu meregistrasikannya ke ApplicationContext.addApplicationListener(listener)
+<br><br>
+
+# Spring Application
+Selain @SpringBootApplication, untuk membuat Application Context nya, kita tidak perlu membuat manual, kita bisa gunakan class SpringApplication
+Secara otomatis SpringApplication akan membuat ApplicationContext dan melakukan hal-hal yang dibutuhkan secara otomatis
+```java
+@SpringBootApplication
+public class FooApplication {
+    
+    @Bean
+    public Foo foo(){
+        return new Foo();
+    }
+}
+```
+Spring Boot Test
+Untuk membuat unit test di Spring Boot, kita bisa menggunakan annotation @SpringBootTest(classes={YourConfiguration.class})
+Selanjutnya kita tidak perlu mengambil bean secara manual lagi menggunakan ApplicationContext, kita bisa menggunakan DI secara langsung di unit test nya menggunakan @Autowired
+```java
+@SpringBootTest(classes = FooApplication.class)
+public class FooApplicationTest {
+    
+    @Autowired
+    Foo foo;
+    
+    @Test
+    void testSpringBoot(){
+        Assertions.assertNotNull(foo);
+    }
+}
+
+```
+<br><br>
+
+# Startup Failure
+FailureAnalyzer digunakan untuk melakukan analisa ketika terjadi error startup yang menyebabkan aplikasi tidak mau berjalan
+<br><br>
+
+# Banner
+Spring Boot memiliki fitur banner, dimana saat aplikasi Spring Boot berjalan, kita bisa menampilkan tulisan banner di console
+Secara default fitur banner ini akan menyala dan akan mencari tulisan banner di classpath dengan nama banner.txt
+Jika tidak ada file tersebut, maka secara otomatis akan menampilkan tulisan banner Spring Boot
+Salah satu contoh tempat untuk membuat banner adalah http://www.bagill.com/ascii-sig.php 
+<br><br>
+
+# Customizing Spring Application
+Kadang ada kalanya kita ingin melakukan pengaturan di Spring Application sebelum Application Context nya dibuat
+https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/SpringApplication.html 
+Kita bisa menggunakan langsung SpringApplication, atau bisa juga menggunakan SpringApplicationBuilder
+https://docs.spring.io/spring-boot/docs/current/api/org/springframework/boot/builder/SpringApplicationBuilder.html 
+<br><br>
+
+# Spring Application Event
+Sebelumnya kita sudah belajar tentang Event Listener
+Di Spring Boot, terdapat banyak sekali Event yang dikirim ketika aplikasi Spring Boot berjalan
+Jika kita ingin, kita bisa membuat Listener untuk menerima event tersebut<br><br>
+
+Menambah Listener
+Beberapa Event di Spring Boot Application Event di trigger bahkan sebelum Spring membuat Application Context
+Oleh karena itu, jika kita buat menggunakan bean, bisa saja beberapa listener tidak akan dipanggil, karena bean nya belum dibuat
+Agar lebih aman, kita bisa menambahkan listener ketika membuat SpringApplication 
+```java
+@Slf4j
+public class AppStartingListener implements ApplicationListener<ApplicationStartedEvent>{
+
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        log.info("Application starting");
+    }
+    
+}
+```
+<br><br>
+
+# Command Line Runner
+Saat kita membuat aplikasi, kadang kita butuh argument yang diberikan pada main method
+Spring Application bisa mengirim data argument tersebut secara otomatis ke bean yang kita buat
+Kita hanya butuh membuat bean dari CommandLineRunner
+CommandLineRunner secara otomatis akan di jalankan ketika Spring Application berjalan
+<br><br>
+
+# Application Runner
+Selain CommandLineRunner, Spring Boot menyediakan fitur ApplicationRunner
+Penggunaan ApplicationRunner sama seperti CommandLineRunnnner, hanya saja argument nya sudah di wrap dalam object ApplicationArguments
+Yang menarik dari ApplicationArguments adalah, memiliki fitur parsing untuk command line argument
+```java
+@Slf4j
+@Component
+public class SimpleRunner implements ApplicationRunner{
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        List<String> profiles = args.getOptionValues("profiles");
+        log.info("Profiles : {}", profiles);
+    }
+    
+}
+```
+<br><br>
+
+# Spring Boot Plugin
+Saat kita membuat project Spring Boot, secara otomatis terdapat spring-boot-plugin di project maven kita
+Plugin ini bisa digunakan untuk mempermudah saat kita menjalankan aplikasi Spring kita
+Kita bisa gunakan perintah :
+mvn spring-boot:run
+Untuk menjalankan aplikasi Spring Boot kita, kita harus memastikan bahwa hanya ada satu main class
+<br><br>
+
+# Distribution File
+Spring Boot plugin juga sudah menyediakan cara membuat distribution file aplikasi kita
+Plugin ini akan mendeteksi main class di project kita, lalu membundle aplikasi kita beserta dependency yang dibutuhkan dalam satu file jar
+Pastikan hanya terdapat satu main class, karena jika lebih dari satu, maka spring boot plugin akan melakukan komplen
+Kita cukup gunakan perintah :
+mvn package
+Secara otomatis akan terbuat single jar application
+
