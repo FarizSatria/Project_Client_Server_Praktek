@@ -205,7 +205,156 @@ public class BeanNameTest {
     }
 }
 ```
+# Dependency Injection
+Dependency Injection (DI) adalah teknik dimana kita bisa mengotomatisasi proses pembuatan object yang tergantung dengan object lain, atau kita sebut dependencies
+Dependencies akan secara otomatis di-inject (dimasukkan) kedalam object yang membutuhkannya
+```java
+@AllArgsConstructor
+@Data
+public class FooBar {
+    
+    private Foo foo;
+    
+    private Bar bar;
+}
+```
+# Memilih Depedency
+Saat terdapat duplicate bean dengan tipe data yang sama, secara otomatis Spring akan memilih bean yang primary
+Namun kita juga bisa memilih secara manual jika memang kita inginkan
+Kita bisa menggunakan annotation @Qualifier(value=”namaBean”) pada parameter di method nya
+```java 
+@Bean
+public FooBar fooBar(@Qualifier("fooSecond") Foo foo, Bar bar){
+    return new FooBar(foo, bar);
+}
+```
+```java
+Foo foo = applicationContext.getBean("fooSecond", Foo.class);
+Bar bar = applicationContext.getBean(Bar.class);
+FooBar fooBar = applicationContext.getBean(FooBar.class);
+        
+Assertions.assertSame(foo, fooBar.getFoo());
+Assertions.assertSame(bar, fooBar.getBar());
+```
+# Circular Dependencies
+Circular dependencies adalah kasus dimana sebuah lingkaran dependency terjadi, misal bean A membutuhkan bean B, bean B membutuhkan bean C, dan ternyata bean C membutuhkan A
+Jika terjadi cyclic seperti ini, secara otomatis Spring bisa mendeteksinya, dan akan mengganggap bahwa itu adalah error
+```java
+@Configuration
+public class CyclicConfiguration {
+    
+    @Bean
+    public CyclicA cyclicA(CyclicB cyclicB){
+        return new CyclicA(cyclicB);
+    }
+    
+    @Bean
+    public CyclicB cyclicB(CyclicC cyclicC){
+        return new CyclicB(cyclicC);
+    }
+    
+    @Bean
+    public CyclicC cyclicC(CyclicA cyclicA){
+        return new CyclicC(cyclicA);
+    }
+}
+```
+# Depends On
+Saat sebuah bean membutuhkan bean lain, secara otomatis bean tersebut akan dibuat setelah bean yang dibutuhkan dibuat
+Namun bagaimana jika bean tersebut tidak membutuhkan bean lain, namun kita ingin sebuah bean dibuat setelah bean lain dibuat?
+Jika ada kasus seperti itu, kita bisa menggunakan annotation @DependsOn(value={”namaBean”})
+Secara otomatis, Spring akan memprioritaskan pembuatan bean yang terdapat di DependsOn terlebih dahulu
+```java
+@Slf4j
+@Configuration
+public class DependsOnConfiguration {
+    
+    @Bean
+    public Foo foo(){
+        log.info("Create new Foo");
+        return new Foo();
+    }
+    
+    @Bean
+    public Bar bar(){
+        log.info("Create new Bar");
+        return new Bar();
+    }   
+}
+```
 
+# Lazy Bean
+Secara default, bean di Spring akan dibuat ketika aplikasi Spring pertama kali berjalan
+Oleh karena itu, kadang ketika aplikasi Spring pertama berjalan akan sedikit lambat, hal ini dikarenakan semua bean akan dibuat di awal
+Namun jika kita mau, kita juga bisa membuat sebuah bean menjadi lazy (malas), dimana bean tidak akan dibuat, sampai memang diakses atau dibutuhkan
+Untuk membuat sebuah bean menjadi lazy, kita bisa tambahkan annotation @Lazy pada bean tersebut
+```java
+@Slf4j
+@Configuration
+public class DependsOnConfiguration {
+    
+    @Lazy
+    @Bean
+    @DependsOn({
+        "bar"
+    })
+    public Foo foo(){
+        log.info("Create new Foo");
+        return new Foo();
+    }
+    
+    @Bean
+    public Bar bar(){
+        log.info("Create new Bar");
+        return new Bar();
+    }
+    
+}
+```
+# Scope
+Secara default strategy object di Spring adalah singleton, artinya hanya dibuat sekali, dan ketika kita akses, akan mengembalikan object yang sama
+Namun kita juga bisa mengubah scope bean yang kita mau di Spring
+Untuk mengubah scope sebuah bean, kita bisa tambahkan annotation @Scope(value=”namaScope”)
+```java
+@Slf4j
+@Configuration
+public class ScopeConfiguration {
+    
+    @Bean
+    @Scope("prototype")
+    public Foo foo(){
+        return new Foo();
+    }
+}
+```
+# Membuat Scope
+Jika scope yang disediakan oleh Spring tidak bisa memenuhi kebutuhan kita, kita juga bisa membuat scope sendiri
+Caranya dengan membuat class yang implement interface Scope
+Selanjutnya untuk meregistrasikannya, kita bisa membuat bean CustomScopeConfigurer
+```java
+    @Override
+    public Object get(String name, ObjectFactory<?> objectFactory) {
+        counter ++;
+        
+        if(objects.size()==2){
+            int index = (int)(counter % 2);
+            return objects.get(index);
+        } else {
+            Object object = objectFactory.getObject();
+            objects.add(object);
+            return object;
+        }
+        
+    }
+    @Override
+    public Object remove(String name) {
+        if(!objects.isEmpty()){
+            return objects.remove(0);
+        }
+        return null;
+    }
+```
+## Kode : Register Doubleton Scope
 
 
 
