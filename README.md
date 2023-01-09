@@ -35,7 +35,7 @@ public class ApplicationContextTest {
     }
 }
 ```
-<br>
+<br><br>
 
 # Singleton
 Singleton adalah salah satu Design Patterns untuk pembuatan objek, dimana sebuah object hanya dibuat satu kali saja
@@ -70,7 +70,7 @@ public class DatabaseTest {
     }
 }
 ```
-<br>
+<br><br>
 
 # Bean
 Secara default, bean merupakan singleton, artinya jika kita mengakses bean yang sama, maka dia akan mengembalikan object yang sama. Kita juga bisa mengubahnya jika tidak ingin singleton<br><br>
@@ -106,7 +106,7 @@ public class BeanTest {
     }
 }
 ```
-<br>
+<br><br>
 
 # Duplicate Bean
 Di Spring, kita bisa mendaftarkan beberapa bean dengan tipe yang sama
@@ -136,6 +136,7 @@ public class DuplicateTest {
     }
 }
 ```
+<br><br>
 # Primary Bean
 Dengan memilih salah satunya menjadi primary, secara otomatis jika kita mengakses bean tanpa menyebutkan nama bean nya, secara otomatis primary nya yang akan dipilih
 Untuk memilih primary bean, kita bisa tambahkan annotaiton @Primary
@@ -171,6 +172,7 @@ public class PrimaryTest {
     }
 }
 ```
+<br><br>
 # Mengubah Nama Bean
 Jika kita ingin mengubah nama bean, kita bisa menggunakan method value() milik annotation @Bean
 ```java
@@ -205,6 +207,7 @@ public class BeanNameTest {
     }
 }
 ```
+<br><br>
 # Dependency Injection
 Dependency Injection (DI) adalah teknik dimana kita bisa mengotomatisasi proses pembuatan object yang tergantung dengan object lain, atau kita sebut dependencies
 Dependencies akan secara otomatis di-inject (dimasukkan) kedalam object yang membutuhkannya
@@ -218,6 +221,7 @@ public class FooBar {
     private Bar bar;
 }
 ```
+<br><br>
 # Memilih Depedency
 Saat terdapat duplicate bean dengan tipe data yang sama, secara otomatis Spring akan memilih bean yang primary
 Namun kita juga bisa memilih secara manual jika memang kita inginkan
@@ -236,6 +240,7 @@ FooBar fooBar = applicationContext.getBean(FooBar.class);
 Assertions.assertSame(foo, fooBar.getFoo());
 Assertions.assertSame(bar, fooBar.getBar());
 ```
+<br><br>
 # Circular Dependencies
 Circular dependencies adalah kasus dimana sebuah lingkaran dependency terjadi, misal bean A membutuhkan bean B, bean B membutuhkan bean C, dan ternyata bean C membutuhkan A
 Jika terjadi cyclic seperti ini, secara otomatis Spring bisa mendeteksinya, dan akan mengganggap bahwa itu adalah error
@@ -259,6 +264,7 @@ public class CyclicConfiguration {
     }
 }
 ```
+<br><br>
 # Depends On
 Saat sebuah bean membutuhkan bean lain, secara otomatis bean tersebut akan dibuat setelah bean yang dibutuhkan dibuat
 Namun bagaimana jika bean tersebut tidak membutuhkan bean lain, namun kita ingin sebuah bean dibuat setelah bean lain dibuat?
@@ -311,6 +317,7 @@ public class DependsOnConfiguration {
     
 }
 ```
+<br><br>
 # Scope
 Secara default strategy object di Spring adalah singleton, artinya hanya dibuat sekali, dan ketika kita akses, akan mengembalikan object yang sama
 Namun kita juga bisa mengubah scope bean yang kita mau di Spring
@@ -327,6 +334,7 @@ public class ScopeConfiguration {
     }
 }
 ```
+<br><br>
 # Membuat Scope
 Jika scope yang disediakan oleh Spring tidak bisa memenuhi kebutuhan kita, kita juga bisa membuat scope sendiri
 Caranya dengan membuat class yang implement interface Scope
@@ -382,6 +390,7 @@ Selanjutnya untuk meregistrasikannya, kita bisa membuat bean CustomScopeConfigur
      Assertions.assertNotSame(bar1, bar2);
      Assertions.assertNotSame(bar3, bar4);
 ```
+<br><br>
 # Life Cycle Callback
 Secara default, bean tidak bisa tahu alur hidup Spring ketika selesai membuat bean dan ketika akan menghancurkan bean
 Jika kita tertarik untuk bereaksi ketika alur hidup Spring terjadi, maka kita bisa implements interface InitializingBean dan DisposableBean
@@ -412,6 +421,7 @@ public class LifeCycleConfiguration {
     }
 }
 ```
+<br><br>
 # Life Cycle Annotation
 Selain menggunakan interface InitializingBean dan DisposableBean, kita juga bisa menggunakan annotation untuk mendaftarkan callback method untuk lifecycle
 Pada annotation @Bean, terdapat method initMethod() dan destoyMethod()
@@ -436,6 +446,7 @@ public class Server {
         return new Server();
     }
 ```
+<br><br>
 # @PostConstruct dan @PreDestroy
 @PostConstruct merupakan method yang ditandai harus dipanggil ketika bean selesai dibuat
 @PreDestroy merupakan method yang ditandai harus dipanggil ketika bean akan dihancurkan
@@ -454,6 +465,7 @@ public class Server {
     }
 }
 ```
+<br><br>
 # Import
 Biasanya kita akan membuat banyak sekali, tergantung seberapa kompleks aplikasi kita
 Spring mendukung import Configuration Class lain jika dibutuhkan
@@ -490,6 +502,7 @@ public class MainConfiguration {
     
 }
 ```
+<br><br>
 # Component Scan
 Spring memiliki fitur component scan, dimana kita bisa secara otomatis mengimport Configuration di sebuah package dan sub package nya secara otomatis
 Untuk melakukan itu, kita bisa gunakan annotation @ComponentScan
@@ -502,6 +515,7 @@ public class ScanConfiguration {
     
 }
 ```
+<br><br>
 # Multiple Constructor
 Seperti di awal disebutkan bahwa Spring hanya mendukung satu constructor untuk Dependency Injection nya
 Namun bagaimana jika terdapat multiple constructor?
@@ -524,6 +538,7 @@ public class ProductService {
     }
 }
 ```
+<br><br>
 # Setter-based Dependency Injection
 Selain menggunakan constructor parameter, kita juga bisa menggunakan setter method jika ingin melakukan dependency injection
 Namun khusus untuk setter method, kita perlu menambah annotation @Autowired pada setter method nya
@@ -542,6 +557,7 @@ public class CategoryService {
     }
 }
 ```
+<br><br>
 # Field-based Dependency Injection
 Selain constructor dan setter, kita juga bisa melakukan dependency injection langsung menggunakan field
 Caranya sama dengan setter, kita bisa tambahkan @Autowired pada fieldnya
@@ -557,6 +573,7 @@ public class CustomerService {
     private CustomerRepository CustomerRepository;
 }
 ```
+<br><br>
 #Qualifier
 Seperti yang sudah dijelaskan di awal, jika terdapat bean dengan tipe data yang sama lebih dari satu, maka secara otomatis Spring akan bingung memilih bean yang mana yang akan digunakan
 Kita perlu memilih salah satu menjadi primary, yang secara otomatis akan dipilih oleh Spring
@@ -577,6 +594,7 @@ public class CustomerService {
     private CustomerRepository premiumCustomerRepository;
 }
 ```
+<br><br>
 # Optional Dependency
 Secara default, semua dependency itu wajib
 Artinya  jika Spring tidak bisa menemukan bean yang dibutuhkan pada saat DI, maka secara otomatis akan terjadi error
@@ -596,7 +614,7 @@ public class OptionalConfiguration {
     }
 }
 ```
-
+<br><br>
 # Factory Bean
 Kadang ada kasus dimana sebuah class misal bukanlah milik kita, misal class third party library
 Sehingga agak sulit jika kita harus menambahkan annotation pada class tersebut
