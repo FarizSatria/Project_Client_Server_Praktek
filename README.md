@@ -668,4 +668,69 @@ Assertions.assertEquals("https://example.com", client.getEndpoint());
 Assertions.assertEquals("private", client.getPrivateKey());
 Assertions.assertEquals("public", client.getPublicKey());
 ```
+# Inheritance
+Saat kita mengakses bean, kita bisa langsung menyebutkan tipe class bean tersebut, atau bisa juga dengan parent class / parent interface bean
+Misal jika kita memiliki sebuah interface bernama MerchantService, lalu kita memiliki bean dengan object implementasi class nya MerchantServiceImpl, maka untuk mengakses bean nya, kita tidak hanya bisa menggunakan tipe MerchantServiceImpl, namun juga bisa dengan MerchantService
+Namun perlu berhati-hati, jika misal MerchantService memiliki banyak bean turunan, pastikan tidak terjadi error duplicate
+```java
+public interface MerchantService {
+    
+}
+```
+```java
+@Component
+public class MerchantServiceImpl implements MerchantService{
+    
+}
+```
+```java
+@Configuration
+@Import(MerchantServiceImpl.class)
+public class InheritanceConfiguration {
+    
+}
+```
 
+# Bean Factory
+ApplicationContext adalah interface turunan dari BeanFactory
+BeanFactory merupakan kontrak untuk management bean di Spring
+Method-method yang sebelumnya kita gunakan untuk mengambil bean, sebenarnya merupakan method kontrak dari interface BeanFactory
+
+# Listable Bean Factory
+Listable Bean Factory adalah turunan dari Bean Factory yang bisa kita gunakan untuk mengakses beberapa bean sekaligus
+Dalam beberapa kasus, ini sangat berguna, seperti misal kita ingin mengambil semua bean dengan tipe tertentu
+
+```java 
+ObjectProvider<Foo> fooObjectProvider = applicationContext.getBeanProvider(Foo.class);
+
+Map<String, Foo> beans = applicationContext.getBeansOfType(Foo.class);
+```
+# Bean Post Processor
+Bean Post Processor merupakan sebuah interface yang bisa kita gunakan untuk memodifikasi proses pembuatan bean di Application Context
+Bean Post Processor mirip seperti middleware, yang diakses sebelum bean di initialized dan setelah bean di initialized
+``java
+public interface IdAware {
+    
+    void setId(String Id);
+}
+```
+<br>
+Kode : Bean Post Processor
+```java
+@Component
+public class IdGeneratorBeanPostProcessor implements BeanPostProcessor {
+
+@Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException{
+        if(bean instanceof IdAware){
+            IdAware idAware = (IdAware) bean;
+            idAware.setId(UUID.randomUUID().toString());
+    }
+        return bean;
+    }
+```
+<br>
+Component
+```java
+
+```
