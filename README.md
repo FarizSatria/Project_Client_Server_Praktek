@@ -708,7 +708,7 @@ Map<String, Foo> beans = applicationContext.getBeansOfType(Foo.class);
 # Bean Post Processor
 Bean Post Processor merupakan sebuah interface yang bisa kita gunakan untuk memodifikasi proses pembuatan bean di Application Context
 Bean Post Processor mirip seperti middleware, yang diakses sebelum bean di initialized dan setelah bean di initialized
-``java
+```java
 public interface IdAware {
     
     void setId(String Id);
