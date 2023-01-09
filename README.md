@@ -562,8 +562,6 @@ Seperti yang sudah dijelaskan di awal, jika terdapat bean dengan tipe data yang 
 Kita perlu memilih salah satu menjadi primary, yang secara otomatis akan dipilih oleh Spring
 Namun jika kita ingin memilih bean secara manual, kita juga bisa menggunakan @Qualifier
 Kita bisa tambahkan @Qualifier di constructor parameter, di setter method atau di field
-<br><br>
-Kode : Duplicate Bean
 ```java
 @Component
 public class CustomerService {
@@ -579,6 +577,77 @@ public class CustomerService {
     private CustomerRepository premiumCustomerRepository;
 }
 ```
+# Optional Dependency
+Secara default, semua dependency itu wajib
+Artinya  jika Spring tidak bisa menemukan bean yang dibutuhkan pada saat DI, maka secara otomatis akan terjadi error
+Namun jika kita memang ingin membuat sebuah dependency menjadi Optional, artinya tidak wajib
+```java
+@Configuration
+public class OptionalConfiguration {
+    
+    @Bean
+    public Foo foo(){
+        return new Foo();       
+    }
+    
+    @Bean
+    public FooBar fooBar(Optional<Foo> foo, Optional<Bar> bar){
+        return new FooBar(foo.orElse(null), bar.orElse(null));
+    }
+}
+```
 
+# Factory Bean
+Kadang ada kasus dimana sebuah class misal bukanlah milik kita, misal class third party library
+Sehingga agak sulit jika kita harus menambahkan annotation pada class tersebut
+Pada kasus seperti ini, cara terbaik untuk membuat bean nya adalah dengan menggunakan @Bean method
+Atau di Spring, kita juga bisa menggunakan @Component, namun kita perlu wrap dalam class Factory Bean
 
+```java
+@Data
+public class PaymentGatewayClient {
+    
+    private String endpoint;
+    
+    private String publicKey;
+    
+    private String privateKey;
+}
+```
+<br><br>
+Kode : Factory Bean
+```java
+@Component("paymentGatewayClient")
+public class PaymentGatewayClientFactoryBean implements FactoryBean<PaymentGatewayClient>{
+
+    @Override
+    public PaymentGatewayClient getObject() throws Exception {
+        PaymentGatewayClient client = new PaymentGatewayClient();
+        client.setEndpoint("https://example.com");
+        client.setPrivateKey("private");
+        client.setPublicKey("public");
+        return client;
+    }
+}
+```
+<br><br>
+Kode : Configuration
+```java
+@Configuration
+@Import({
+    PaymentGatewayClientFactoryBean.class
+})
+public class FactoryConfiguration {
+    
+}
+```
+<br><br>
+Kode : Mengakses Bean
+```java
+PaymentGatewayClient client = applicationContext.getBean(PaymentGatewayClient.class);
+        
+Assertions.assertEquals("https://example.com", client.getEndpoint());
+Assertions.assertEquals("private", client.getPrivateKey());
+Assertions.assertEquals("public", client.getPublicKey());
+```
 
