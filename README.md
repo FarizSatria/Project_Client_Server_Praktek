@@ -745,3 +745,119 @@ public class Car implements IdAware{
     }
 }
 ```
+# Ordered
+Saat kita membuat Bean Post Processor, kita bisa membuat lebih dari satu
+Kadang ada kasus saat membuat beberapa Bean Post Processor, kita ingin membuat yang berurutan
+Sayangnya secara default, Spring tidak menjamin urutan eksekusi nya
+Agar kita bisa menentukan urutannya, kita bisa menggunakan interface Ordered
+```java
+public interface IdAware {
+    
+    void setId(String Id);
+    
+    String getId();
+}
+```
+Kode : Id Generator
+```java
+@Component
+public class IdGeneratorBeanPostProcessor implements BeanPostProcessor, Ordered{
+    
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+    
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException{
+        log.info("Id Generator Processor for Bean {}", beanName);
+        if(bean instanceof IdAware){
+            log.info("Set Id Generator for Bean {}", beanName);
+            IdAware idAware = (IdAware) bean;
+            idAware.setId(UUID.randomUUID().toString());
+    }
+        return bean;
+    }   
+}
+
+```
+Kode : Prefix Id Generator
+```java
+@Component
+public class PrefixIdGeneratorBeanPostProcessor implements BeanPostProcessor, Ordered{
+    
+    @Override
+    public int getOrder() {
+        return 2;
+    }
+    
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException{
+        log.info("Prefix Id Generator Processor for Bean {}", beanName);
+        if(bean instanceof IdAware){
+            log.info("Prefix Set Id Generator for Bean {}", beanName);
+            IdAware idAware = (IdAware) bean;
+            idAware.setId("FARIZ-" +idAware.getId());
+    }
+        return bean;
+    }
+}
+```
+# Aware
+Aware adalah super interface yang digunakan untuk semua Aware interface
+Aware ini diperuntukkan untuk penanda agar Spring melakukan injection object yang kita butuhkan
+Mirip seperti yang sudah kita lakukan ketika membuat IdAware menggunakan IdGenerator Bean Post Processor
+```java
+@Component
+public class AuthService implements ApplicationContextAware, BeanNameAware{
+    
+    @Getter
+    private String beanName;
+    
+    @Getter
+    private ApplicationContext applicationContext;
+}
+```
+# Bean Factory Post Processor
+Secara default, mungkin kita tidak akan pernah sama sekali membuat Application Context secara manual
+Namun kadang ada keadaan kita ingin memodifikasi secara internal Application Context
+Spring merekomendasikan kita untuk membuat Bean Factory Post Processor
+```java
+@Component
+public class FooBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor{
+
+    @Override
+    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
+        GenericBeanDefinition definition = new GenericBeanDefinition();
+        definition.setScope("singleton");
+        definition.setBeanClass(Foo.class);
+        
+        registry.registerBeanDefinition("foo", definition);
+    }
+
+    @Override
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory clbf) throws BeansException {
+
+    }    
+}
+```
+# Event Listener
+Spring memiliki fitur Event Listener yang bisa kita gunakan untuk komunikasi antar class menggunakan Event
+Event di Spring merupakan object turunan dari ApplicationEvent, sedangkan Listener di Spring merupakan turunan dari ApplicationListener
+
+# Application Event Publisher
+Ketika kita ingin mengirimkan event ke listener, kita bisa menggunakan object ApplicationEventPublisher, dimana ApplicationEventPublisher juga merupakan super interface dari ApplicationContext
+Atau kita bisa menggunakan ApplicationEventPublisherAware untuk mendapatkan object ApplicationEventPublisher
+```java
+public class LoginSuccessEvent extends ApplicationEvent{
+    
+    @Getter
+    private final User user;
+    
+    public LoginSuccessEvent(User user){
+        super(user);
+        this.user = user;
+    }
+    
+}
+```
