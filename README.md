@@ -354,12 +354,231 @@ Selanjutnya untuk meregistrasikannya, kita bisa membuat bean CustomScopeConfigur
         return null;
     }
 ```
-## Kode : Register Doubleton Scope
+# Kode : Register Doubleton Scope
+```java
+@Bean
+    public CustomScopeConfigurer customScopeConfigurer(){
+        CustomScopeConfigurer configurer = new CustomScopeConfigurer();
+        configurer.addScope("doubleton", new DoubletonScope());
+        return configurer;
+    }
+    
+    @Bean
+    @Scope("doubleton")
+    public Bar bar(){
+        log.info("Create new Bar");
+        return new Bar();
+    }
+```
+# Kode : Mengakses Doubleton Bean
+```java
+    Bar bar1= applicationContext.getBean(Bar.class);
+    Bar bar2= applicationContext.getBean(Bar.class);
+    Bar bar3= applicationContext.getBean(Bar.class);
+    Bar bar4= applicationContext.getBean(Bar.class);
+        
+     Assertions.assertSame(bar1, bar3);
+     Assertions.assertSame(bar2, bar4);         
+     Assertions.assertNotSame(bar1, bar2);
+     Assertions.assertNotSame(bar3, bar4);
+```
+# Life Cycle Callback
+Secara default, bean tidak bisa tahu alur hidup Spring ketika selesai membuat bean dan ketika akan menghancurkan bean
+Jika kita tertarik untuk bereaksi ketika alur hidup Spring terjadi, maka kita bisa implements interface InitializingBean dan DisposableBean
+InitializingBean digunakan jika kita ingin bereaksi ketika Spring selesai membuat bean
+```java
+@Slf4j
+public class Connection implements InitializingBean, DisposableBean{
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        log.info("Connection is ready to be used");
+    }
 
+    @Override
+    public void destroy() throws Exception {
+        log.info("Connection is closed");
+    } 
+}
+```
+# Kode : LifeCycle Configuration
+```java 
+@Configuration
+public class LifeCycleConfiguration {
+    
+    @Bean
+    public Connection connection(){
+        return new Connection();
+    }
+}
+```
+# Life Cycle Annotation
+Selain menggunakan interface InitializingBean dan DisposableBean, kita juga bisa menggunakan annotation untuk mendaftarkan callback method untuk lifecycle
+Pada annotation @Bean, terdapat method initMethod() dan destoyMethod()
+initMethod() digunakan untuk meregistrasikan method yang akan dipanggil ketika bean selesai dibuat
+destroyMethod() digunakan untuk meregistrasikan method yang akan dipanggil ketika bean akan dihancurkan
+```java
+@Slf4j
+public class Server {
 
+    public void start(){
+        log.info("Start Server");
+    }
 
-
+    public void stop(){
+        log.info("Stop Server");
+    }
+}
+```
+```java
+@Bean (initMethod = "start", destroyMethod = "stop")
+    public Server server(){
+        return new Server();
+    }
+```
+# @PostConstruct dan @PreDestroy
+@PostConstruct merupakan method yang ditandai harus dipanggil ketika bean selesai dibuat
+@PreDestroy merupakan method yang ditandai harus dipanggil ketika bean akan dihancurkan
+```java
+@Slf4j
+public class Server {
+    
+    @PostConstruct
+    public void start(){
+        log.info("Start Server");
+    }
+    
+    @PreDestroy
+    public void stop(){
+        log.info("Stop Server");
+    }
+}
+```
+# Import
+Biasanya kita akan membuat banyak sekali, tergantung seberapa kompleks aplikasi kita
+Spring mendukung import Configuration Class lain jika dibutuhkan
+Kita bisa menggunakan annotation @Import, lalu sebutkan Configuration Class mana yang ingin kita import
+Ketika kita melakukan import, kita bisa import lebih dari satu class
+```java
+@Configuration
+public class FooConfiguration {
+    
+    @Bean
+    @Primary
+    public Foo foo(){
+        return new Foo();
+    }
+}
+```
+```java
+@Configuration
+public class BarConfiguration {
+    
+    @Bean
+    public Bar bar(){
+        return new Bar();
+    }
+}
+```
+```java
+@Configuration
+@Import({
+    FooConfiguration.class,
+    BarConfiguration.class
+})
+public class MainConfiguration {
+    
+}
+```
+# Component Scan
+Spring memiliki fitur component scan, dimana kita bisa secara otomatis mengimport Configuration di sebuah package dan sub package nya secara otomatis
+Untuk melakukan itu, kita bisa gunakan annotation @ComponentScan
+```java
+@Configuration
+@ComponentScan(basePackages = {
+    "com.fariz.farizbelajarspringdasar.configuration"
+})
+public class ScanConfiguration {
+    
+}
+```
+# Multiple Constructor
+Seperti di awal disebutkan bahwa Spring hanya mendukung satu constructor untuk Dependency Injection nya
+Namun bagaimana jika terdapat multiple constructor?
+Jika pada kasus seperti ini, kita harus menandai constructor mana yang akan digunakan oleh Spring
+Caranya kita bisa menggunakan annotation @Autowired
+```java
+@Component
+public class ProductService {
+    
+    @Getter
+    private ProductRepository productRepository;
+    
+    @Autowired
+    public ProductService(ProductRepository productRepository){
+        this.productRepository = productRepository;
+    }
+    
+    public ProductService(ProductRepository productRepository, String name){
+        this.productRepository = productRepository;
+    }
+}
+```
+# Setter-based Dependency Injection
+Selain menggunakan constructor parameter, kita juga bisa menggunakan setter method jika ingin melakukan dependency injection
+Namun khusus untuk setter method, kita perlu menambah annotation @Autowired pada setter method nya
+Secara otomatis Spring akan mencari bean yang dibutuhkan di setter method yang memiliki annotation @Autowired
+Setter-based DI juga bisa digabung dengan Constructor-based DI
+```java 
+@Component
+public class CategoryService {
+    
+    @Getter
+    private CategoryRepository categoryRepository;
+    
+    @Autowired
+    public void setCategoryRepository(CategoryRepository categoryRepository){
+        this.categoryRepository = categoryRepository;
+    }
+}
+```
+# Field-based Dependency Injection
+Selain constructor dan setter, kita juga bisa melakukan dependency injection langsung menggunakan field
+Caranya sama dengan setter, kita bisa tambahkan @Autowired pada fieldnya
+Secara otomatis Spring akan mencari bean dengan tipe data tersebut
+Field-based DI bisa digabung sekaligus dengan Setter-based DI dan Constructor-based DI
+Khusus Field-based DI, Spring sendiri sudah tidak merekomendasikan penggunaan cara melakukan DI dengan Field
+```java
+@Component
+public class CustomerService {
+    
+    @Getter
+    @Autowired
+    private CustomerRepository CustomerRepository;
+}
+```
+#Qualifier
+Seperti yang sudah dijelaskan di awal, jika terdapat bean dengan tipe data yang sama lebih dari satu, maka secara otomatis Spring akan bingung memilih bean yang mana yang akan digunakan
+Kita perlu memilih salah satu menjadi primary, yang secara otomatis akan dipilih oleh Spring
+Namun jika kita ingin memilih bean secara manual, kita juga bisa menggunakan @Qualifier
+Kita bisa tambahkan @Qualifier di constructor parameter, di setter method atau di field
+<br><br>
+Kode : Duplicate Bean
+```java
+@Component
+public class CustomerService {
+    
+    @Getter
+    @Autowired
+    @Qualifier("normalCustomerRepository")
+    private CustomerRepository normalCustomerRepository;
+    
+    @Getter
+    @Autowired
+    @Qualifier("premiumCustomerRepository")
+    private CustomerRepository premiumCustomerRepository;
+}
+```
 
 
 
