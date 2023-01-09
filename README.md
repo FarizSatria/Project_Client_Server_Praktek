@@ -861,3 +861,77 @@ public class LoginSuccessEvent extends ApplicationEvent{
     
 }
 ```
+Kode : Listener
+```java
+@Component
+@Slf4j
+public class LoginSuccessListener implements ApplicationListener<LoginSuccessEvent>{
+
+    @Override
+    public void onApplicationEvent(LoginSuccessEvent event) {
+        log.info("Success login for user {}", event.getUser());
+    }
+    
+}
+```
+Kode : Mengirim Event
+```java
+@Component
+public class UserService implements ApplicationEventPublisherAware{
+
+    private ApplicationEventPublisher applicationEventPublisher;
+    
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
+    
+    public boolean login(String username, String password){
+        if(isLoginSuccess(username, password)){
+            applicationEventPublisher.publishEvent(new LoginSuccessEvent(new User(username)));
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public boolean isLoginSuccess(String username, String password){
+        return "fariz".equals(username) && "fariz".equals(password);
+    }
+    
+}
+
+```
+Mengakses Bean
+```java
+public class EventListenerTest {
+    
+    @Configuration
+    @Import({
+        UserService.class,
+        LoginSuccessListener.class,
+        LoginAgainSuccessListener.class,
+        UserListener.class
+    })
+    public static class TestConfiguration{
+        
+    }
+    
+    private ConfigurableApplicationContext applicationContext;
+    
+    @BeforeEach
+    void setUp(){
+        applicationContext = new AnnotationConfigApplicationContext(TestConfiguration.class);
+        applicationContext.registerShutdownHook();
+    }
+    
+    @Test
+    void testEvent(){
+        
+        UserService userService = applicationContext.getBean(UserService.class);
+        userService.login("fariz", "fariz");
+        userService.login("fariz", "salah");
+        userService.login("kurniawan", "salah");
+    }
+}
+```
