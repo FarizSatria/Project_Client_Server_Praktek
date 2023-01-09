@@ -715,8 +715,8 @@ public interface IdAware {
 }
 ```
 
-<br>
 Kode : Bean Post Processor
+
 ```java
 @Component
 public class IdGeneratorBeanPostProcessor implements BeanPostProcessor {
@@ -730,7 +730,7 @@ public class IdGeneratorBeanPostProcessor implements BeanPostProcessor {
         return bean;
     }
 ```
-<br>
+
 Component
 ```java
 @Component
