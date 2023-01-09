@@ -136,6 +136,75 @@ public class DuplicateTest {
     }
 }
 ```
+# Primary Bean
+Dengan memilih salah satunya menjadi primary, secara otomatis jika kita mengakses bean tanpa menyebutkan nama bean nya, secara otomatis primary nya yang akan dipilih
+Untuk memilih primary bean, kita bisa tambahkan annotaiton @Primary
+```java
+@Configuration
+public class PrimaryConfiguration {
+    @Primary
+    @Bean
+    public Foo foo1(){
+        return new Foo();
+    }  
+    @Bean
+    public Foo foo2(){
+        return new Foo();
+    }
+}
+```
+```java
+public class PrimaryTest {    
+    private ApplicationContext applicationContext;    
+    @BeforeEach
+    void setup(){
+        applicationContext = new AnnotationConfigApplicationContext(PrimaryConfiguration.class);
+    }
+    @Test
+    void testGetPrimary(){
+        Foo foo = applicationContext.getBean(Foo.class);
+        Foo foo1 = applicationContext.getBean("foo1",Foo.class);
+        Foo foo2 = applicationContext.getBean("foo2",Foo.class);      
+        Assertions.assertSame(foo, foo1);
+        Assertions.assertNotSame(foo, foo2);
+        Assertions.assertNotSame(foo1, foo2);
+    }
+}
+```
+# Mengubah Nama Bean
+Jika kita ingin mengubah nama bean, kita bisa menggunakan method value() milik annotation @Bean
+```java
+@Configuration
+public class BeanNameConfiguration {
+    @Primary
+    @Bean(name = "fooFirst")
+    public Foo foo1(){
+        return new Foo();
+    }   
+    @Bean(name = "fooSecond")
+    public Foo foo2(){
+        return new Foo();
+    }
+}
+```
+```java
+public class BeanNameTest {   
+    private ApplicationContext applicationContext;   
+    @BeforeEach
+    void setup(){
+        applicationContext= new AnnotationConfigApplicationContext(BeanNameConfiguration.class);
+    }   
+    @Test
+    void testBeanName(){
+        Foo foo = applicationContext.getBean(Foo.class);
+        Foo fooFirst = applicationContext.getBean("fooFirst",Foo.class);
+        Foo fooSecond = applicationContext.getBean("fooSecond",Foo.class);
+        
+        Assertions.assertSame(foo, fooFirst);
+        Assertions.assertNotSame(foo, fooSecond);
+    }
+}
+```
 
 
 
